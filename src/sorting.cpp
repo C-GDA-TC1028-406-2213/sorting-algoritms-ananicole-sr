@@ -4,36 +4,117 @@
 #include <algorithm>
 #include <sstream>
 #include <iomanip>
+using namespace std;
 
 namespace SortingAlgorithms {
 
+void swap(int &uno, int &dos){
+    int var = uno;
+    uno = dos;
+    dos = var;
+}
+
 void bubbleSort(int arr[], int n) {
-    
+    for(int i = 0; i < (n - 1); i++){
+            for(int j = 0; j < (n - 1); j++){
+                if(arr[j] > arr[j+1]){
+                    swap(arr[j], arr[j+1]);
+                }
+            }
+        }
 }
 
 void selectionSort(int arr[], int n) {
-    
+       for(int i = 0; i < n; i++){
+           int grande = 0;
+           for(int j = 0; j < n - i ; j++){
+               if(arr[j] > arr[grande]){
+                   grande = j;
+               }
+           }
+           swap(arr[grande],arr[(n-1)-i]);
+       }
 }
 
 void insertionSort(int arr[], int n) {
-    
+    for(int i = 1; i < n ; i++){
+           int m = i;
+           int valor = arr[i];
+           
+           while(valor < arr[m-1] && m > 0){
+               arr[m]= arr[m-1];
+               m--;
+           }
+           arr[m] = valor;
+       }
 }
 
 void merge(int arr[], int left, int mid, int right) {
-    
+    int arrayfinal[right-left+1];
+       int p1 = left;
+       int p2 = mid+1;
+       
+       for(int idx = 0; idx <= right; idx++){
+           if(p1 <= mid && p2 <= right){
+               if(arr[p1] < arr[p2]){
+                   arrayfinal[idx] = arr[p1];
+                   p1++;
+               } else{
+                   arrayfinal[idx] = arr[p2];
+                   p2++;
+               }
+           } else {
+               while(p1 <= mid){
+                   arrayfinal[idx++] = arr[p1];
+                   p1++;
+               }
+               while(p2 <= right){
+                   arrayfinal[idx++] = arr[p2];
+                   p2++;
+               }
+           }
+       }
+       for(int t = 0; t < (right-left+1); t++){
+           arr[left+t] = arrayfinal[t];
+       }
 }
 
 void mergeSort(int arr[], int left, int right) {
-    
+    if (left >= right) return;
+
+      int mid = (left+right)/2;
+      mergeSort(arr,left,mid);
+      mergeSort(arr,(mid+1), right);
+      merge(arr,left,mid,right);
 }
 
 int partition(int arr[], int low, int high) {
-    
-    return 0;
+    int pivote = arr[low];
+       int i = low;
+       int j = high + 1;
+       while(i < j){
+           do {
+            i++;
+           } while (i <= high && arr[i] < pivote);
+           do {
+               j--;
+           } while (j >= low && arr[j] > pivote);
+
+
+           if(i < j){
+               swap(arr[i], arr[j]);
+           }
+       }
+       swap(arr[low], arr[j]);
+       return j;
 }
 
 void quickSort(int arr[], int low, int high) {
-    
+    if(low >= high) return;
+
+    int par = partition(arr, low, high); 
+    quickSort(arr, low, par - 1);
+    quickSort(arr, par + 1, high);
 }
 
 void heapify(int arr[], int n, int i) {
